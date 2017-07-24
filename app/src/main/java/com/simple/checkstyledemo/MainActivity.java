@@ -2,6 +2,7 @@ package com.simple.checkstyledemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.*;
 
 public class MainActivity extends AppCompatActivity {
 
