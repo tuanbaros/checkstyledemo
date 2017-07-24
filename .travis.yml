@@ -1,0 +1,31 @@
+language: android
+
+before_install:
+  # fix accept licenses bug
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+android:
+  components:
+    - build-tools-26.0.0
+jdk:
+  - oraclejdk8
+
+script:
+#  - ./gradlew clean checkstyle violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_OAUTH2TOKEN=$GITHUB_OAUTH2TOKEN
+#  - ./gradlew clean
+  - ./gradlew clean checkstyle violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_USERNAME=tuanbaros -DGITHUB_PASSWORD=thanhtuan378129
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+env:
+  global:
+    secure: hsf3VQwjYQzQZlyDjXEwWcTQzNiM+0Mxd6MpqTzbnDihbWzvEVpSwKGwmxhLKp9vrtp3ZK97zTu6N9IcE7t4hWEdq9wBzj+FE5mBJ+P+uC4K0EoLSSk0RdwU7bVO2kLzJnM2cqRd9cT0j9ZKjsd9F8ewhMjeogA7LhAzG6yMqLzlKJDA4g6ZAZ7Vuo6eVsv4KGLsMcPQVZ+tcTXStUrKptrK5ytv5MQegRMVzcGYdLrJsHMZvw2gT2QHH0O+GXeWlQTpcH9cfI6nDe7smQhU3AhqxloxAsABqkIFR8f6bKM6lkHH8PHtd47QcNTJWxX1d6I1kAVyqrays9N+DzL/2ofsuoj29AOy0tb6kZCN4DEBUC3rWanOWygvyKMSIq/xxqrlYhSEV45iLpdI5uCikNLOsiSpSk3D1imV5m1/fHaF7M60pQBJLyOj+UzGjdVJx5ALbBNGJ/bcbs+OpCcH+xthRMBCSzuopojJ9IG5y9lumNM4wEVyfi9u656DUsZUND0lCHg17L2VpoD+t531uSiEiM9jC57QTEjypsPehUjsmsLqUTAy28QVAZb+mBqo8VBTSPSIij0C4+WsxToILAhULPe7dpfp6qi5/0gPVfhPonGC5tyh7vHugBM571S501VxGy/7Hr1fIlrYwtJSAv5oMcxmNwcAG9v/IlNuFbI=
