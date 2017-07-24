@@ -1,0 +1,18 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+.idea
+local.properties
+build
+.gradle
+# Eclipse project files
+.project
+.settings/
+.classpath
