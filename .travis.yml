@@ -20,7 +20,7 @@ script:
   - ./gradlew lint
   - ./gradlew violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_OAUTH2TOKEN=$GITHUB_OAUTH2TOKEN
 #  - ./gradlew clean
-#  - ./gradlew clean checkstyle violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_USERNAME=tuanbaros -DGITHUB_PASSWORD=thanhtuan378129
+#  - ./gradlew clean checkstyle violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$TRAVIS_PULL_REQUEST -DGITHUB_USERNAME=tuanbaros -DGITHUB_PASSWORD=
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
