@@ -2,30 +2,50 @@ apply plugin: 'com.android.application'
 apply from: '../checkci.gradle'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.3"
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
   defaultConfig {
     applicationId "com.simple.checkstyledemo"
     minSdkVersion 14
-    targetSdkVersion 25
+    targetSdkVersion rootProject.ext.compileSdkVersion
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
   buildTypes {
+    debug {
+      // disable fabric for debug
+      ext.enableCrashlytics = false
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+  productFlavors {
+    dev {
+      versionNameSuffix "-dev"
+      applicationIdSuffix ".dev"
+      resValue "string", "hello", "Dev Hello"
+      resValue "color", "text_color", "#ff0000"
+      // limit for debug only use en and xxhdpi resource
+      resConfigs "en", "xxhdpi"
+    }
+    pro {
+      versionNameSuffix "-pro"
+      applicationIdSuffix ""
+      resValue "string", "hello", "Pro Hello"
+      resValue "color", "text_color", "#00ff00"
     }
   }
 }
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
-  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+  androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoLibVersion", {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
-  compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-  compile 'com.android.support.constraint:constraint-layout:1.0.2'
-  testCompile 'junit:junit:4.12'
+  compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
+  compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutLibVersion"
+  testCompile "junit:junit:$rootProject.ext.jUnitVersion"
 }

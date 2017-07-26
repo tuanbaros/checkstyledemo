@@ -1,0 +1,20 @@
+task hello {
+  doLast {
+    println 'hello'
+    Simple simple = new Simple()
+    simple.show()
+    def foo = 6.5
+    println "foo has value: $foo"
+    hi 'Tuan'
+  }
+}
+
+def hi(name) {
+  println "Hi, $name"
+}
+
+class Simple {
+  public static void show() {
+    println 'abc'
+  }
+}
