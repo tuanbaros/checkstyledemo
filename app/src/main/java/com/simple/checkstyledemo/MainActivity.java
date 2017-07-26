@@ -16,9 +16,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void test(int a) {
-        if (a > 3){
-            return;
-        }
+        if (a > 3)return;
         s = a;
     }
 }
