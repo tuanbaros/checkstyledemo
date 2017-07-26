@@ -1,0 +1,105 @@
+import se.bjurr.violations.comments.github.plugin.gradle.ViolationCommentsToGitHubTask
+import se.bjurr.violations.lib.model.SEVERITY
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'se.bjurr.violations.violation-comments-to-github-gradle-plugin'
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+  dependencies {
+    classpath "se.bjurr.violations:violation-comments-to-github-gradle-plugin:1.27"
+  }
+}
+
+android {
+  lintOptions {
+    abortOnError false
+    xmlReport true
+    htmlReport false
+    lintConfig file("${project.rootDir}/config/lint/lint.xml")
+  }
+}
+
+task checkstyle(type: Checkstyle) {
+//  group 'checkci'
+  ignoreFailures true
+  showViolations true
+  configFile file("${project.rootDir}/config/checkstyle/android-style.xml")
+  configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/checkstyle/suppressions.xml")
+  source 'src/main/java'
+  include '**/*.java'
+  exclude '**/gen/**'
+  classpath = files()
+  reports {
+    xml.enabled true
+    html.enabled false
+  }
+}
+
+task findbugs(type: FindBugs) {
+//  group 'checkci'
+  ignoreFailures true
+  effort "max"
+  reportLevel "high"
+  excludeFilter file("${project.rootDir}/config/findbugs/exclude.xml")
+  source fileTree('src/main/java')
+  classes = files("${project.buildDir}/intermediates/classes")
+  classpath = files()
+  reports {
+    xml.enabled true
+    html.enabled false
+  }
+}
+
+task pmd(type: Pmd) {
+//  group 'checkci'
+  ignoreFailures true
+  ruleSetFiles = files("${project.rootDir}/config/pmd/ruleset.xml")
+  source 'src/main/java'
+  include '**/*.java'
+  exclude '**/gen/**'
+  reports {
+    xml.enabled true
+    html.enabled false
+  }
+}
+
+task violationCommentsToGitHub(type: ViolationCommentsToGitHubTask) {
+//  group 'checkci'
+  repositoryOwner "tuanbaros";
+  repositoryName "checkstyledemo"
+  pullRequestId System.properties['GITHUB_PULLREQUESTID']
+  username System.properties['GITHUB_USERNAME']
+  password System.properties['GITHUB_PASSWORD']
+  oAuth2Token System.properties['GITHUB_OAUTH2TOKEN']
+  gitHubUrl "https://api.github.com/"
+  createCommentWithAllSingleFileComments false
+  createSingleFileComments true
+  commentOnlyChangedContent true
+  minSeverity SEVERITY.INFO // ERROR, INFO, WARN
+  violations = [
+      ["FINDBUGS",   ".", ".*/findbugs/.*\\.xml\$",   "Findbugs"],
+      ["PMD",        ".", ".*/pmd/.*\\.xml\$",        "PMD"],
+      ["CHECKSTYLE", ".", ".*/checkstyle/.*\\.xml\$", "Checkstyle"],
+      ["JSHINT",     ".", ".*/jshint/.*\\.xml\$",     "JSHint"],
+      ["CSSLINT",    ".", ".*/csslint/.*\\.xml\$",     "CssLint"],
+      ["LINT",    ".", ".*/.*\\.xml\$",     "Lint"]
+  ]
+}
+//
+//task checkci {
+//  group 'checkci'
+//}
+
+//checkci.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint', 'violationCommentsToGitHub'
+
+dependencies {
+  //check style
+  checkstyle 'com.puppycrawl.tools:checkstyle:6.15'
+}
