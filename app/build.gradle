@@ -14,6 +14,9 @@ android {
   }
   buildTypes {
     debug {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       // disable fabric for debug
       ext.enableCrashlytics = false
     }
@@ -29,7 +32,7 @@ android {
       resValue "string", "hello", "Dev Hello"
       resValue "color", "text_color", "#ff0000"
       // limit for debug only use en and xxhdpi resource
-      resConfigs "en", "xxhdpi"
+//      resConfigs "en", "xxhdpi"
     }
     pro {
       versionNameSuffix "-pro"

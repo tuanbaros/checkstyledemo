@@ -22,6 +22,7 @@ allprojects {
 }
 
 apply from: 'simple.gradle'
+apply from: 'pass.gradle'
 
 task clean(type: Delete) {
   delete rootProject.buildDir
