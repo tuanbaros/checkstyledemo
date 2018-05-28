@@ -8,8 +8,18 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
+      - *restore_gems_cache
+      - *ruby_dependencies
+      - *android_dependencies
+      - *save_gems_cache
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Gem
+          command: gem install fastlane
+      - run:
+          name: Fastlane
+          command: fastlane test
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -40,6 +50,9 @@ jobs:
 #            ./gradlew violationCommentsToGitHub -DGITHUB_PULLREQUESTID=$param1 -DGITHUB_USERNAME=tuanbaros -DGITHUB_PASSWORD=
 #            param1=$(echo $CIRCLE_PULL_REQUEST | cut -c50-)
 #            param1=$(echo $CIRCLE_PULL_REQUEST | rev | cut -d/ -f1 | rev)
+      - run:
+          name: Run Fastlane
+          command: fastlane test
       - store_artifacts:
           path: app/build/reports
           destination: reports
